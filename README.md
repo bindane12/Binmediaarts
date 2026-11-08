@@ -13,3 +13,7 @@ python3 -m http.server 8000 --directory gallery-3d
 Open http://localhost:8000 in your browser. Python 3 is required for the local server; the portfolio itself is a static website. The 3D gallery loads Three.js from a CDN.
 
 On desktop, use WASD or arrow keys to move and drag to look. On phones, use the movement stick and drag the screen to look. Featured project shortcuts open their detail panels.
+
+## Deploy on Vercel
+
+Import this repository with Root Directory set to the repository root (`.`) and Framework Preset set to **Other**. The root `vercel.json` serves `gallery-3d` directly as static output, with no build step. If you previously changed dashboard build or output overrides, clear those overrides and redeploy.
