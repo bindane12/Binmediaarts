@@ -1,0 +1,9 @@
+{
+  "name": "gallery-3d",
+  "version": "1.0.0",
+  "description": "3D Art Gallery Showcase",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "serve": "npx -y serve . -l 8000"
+  }
+}

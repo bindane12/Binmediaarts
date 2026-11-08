@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Research Portfolio</title>
+  <style>
+    :root { --paper:#f3f0e8; --ink:#24231f; --muted:#66635c; --line:#d6d1c5; --accent:#e75b1b; --panel:#fbfaf6; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; line-height:1.65; }
+    header { position:sticky; top:0; z-index:5; display:flex; align-items:center; justify-content:space-between; gap:20px; padding:18px max(24px,calc((100vw - 1180px)/2)); background:rgba(243,240,232,.93); border-bottom:1px solid var(--line); backdrop-filter:blur(12px); }
+    .brand { color:var(--ink); font-size:12px; font-weight:700; letter-spacing:2px; text-decoration:none; text-transform:uppercase; white-space:nowrap; }
+    nav { display:flex; gap:18px; flex-wrap:wrap; }
+    nav a { color:var(--muted); font-size:12px; letter-spacing:.6px; text-decoration:none; }
+    nav a:hover, nav a[aria-current="page"] { color:var(--ink); text-decoration:underline; text-underline-offset:4px; }
+    main { max-width:1120px; margin:auto; padding:52px 36px 76px; }
+    .kicker { margin:0 0 12px; color:var(--accent); font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; }
+    h1 { max-width:780px; margin:0; font-size:clamp(38px,6vw,68px); font-weight:500; letter-spacing:-.045em; line-height:1.02; }
+    .deck { max-width:680px; margin:22px 0 0; color:var(--muted); font-size:17px; line-height:1.7; }
+    .meta { display:flex; flex-wrap:wrap; gap:9px 20px; margin:28px 0 46px; color:var(--muted); font-size:12px; }
+    .meta span { border-left:1px solid var(--line); padding-left:12px; }
+    .hero { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(290px,.85fr); gap:30px; align-items:center; margin:42px 0 58px; }
+    figure { margin:0; background:#dedbd2; border:1px solid var(--line); }
+    figure img { display:block; width:100%; max-height:670px; object-fit:contain; background:#efede6; }
+    .video-container { position:relative; width:min(100%,390px); aspect-ratio:9 / 16; margin:auto; background:#151513; border-radius:8px; overflow:hidden; box-shadow:0 12px 36px rgba(0,0,0,0.18); }
+    .video-preview { position:relative; display:flex; align-items:center; justify-content:center; width:100%; height:100%; text-decoration:none; background:#151513; }
+    .video-preview img { width:100%; height:100%; max-height:none; object-fit:cover; transition:transform 0.4s ease, opacity 0.3s ease; }
+    .video-preview:hover img { transform:scale(1.03); opacity:0.9; }
+    .play-btn { position:absolute; z-index:2; display:flex; align-items:center; justify-content:center; width:64px; height:64px; border-radius:50%; background:rgba(20,20,18,0.75); border:1.5px solid rgba(255,255,255,0.85); backdrop-filter:blur(8px); transition:all 0.25s ease; box-shadow:0 8px 24px rgba(0,0,0,0.35); }
+    .play-btn svg { width:22px; height:22px; margin-left:3px; fill:#fff; transition:transform 0.2s ease; }
+    .video-preview:hover .play-btn { transform:scale(1.1); background:#ff0000; border-color:#ff0000; }
+    .video-preview:hover .play-btn svg { fill:#fff; transform:scale(1.05); }
+    .yt-badge { position:absolute; bottom:14px; z-index:2; padding:6px 12px; border-radius:20px; background:rgba(20,20,18,0.78); backdrop-filter:blur(6px); color:#fff; font-size:11px; font-weight:600; letter-spacing:0.5px; border:1px solid rgba(255,255,255,0.25); transition:background 0.2s ease; }
+    .video-preview:hover .yt-badge { background:rgba(20,20,18,0.92); border-color:rgba(255,255,255,0.5); }
+    figcaption { padding:10px 13px; color:var(--muted); font-size:11px; }
+    .dataset-figure { margin:18px 0 0; }
+    .dataset-figure img { max-height:560px; }
+    .research-note { padding:22px; background:var(--panel); border-top:3px solid var(--accent); }
+    .research-note h2 { margin:0 0 10px; font-size:13px; letter-spacing:1px; text-transform:uppercase; }
+    .research-note p { margin:0; color:var(--muted); font-size:14px; }
+    .project-link { display:inline-block; margin-top:17px; padding:9px 12px; border:1px solid var(--ink); color:var(--ink); font-size:11px; font-weight:700; letter-spacing:.8px; text-decoration:none; text-transform:uppercase; }
+    .project-link:hover { background:var(--ink); color:var(--paper); }
+    .layout { display:grid; grid-template-columns:168px minmax(0,720px); gap:46px; }
+    .sidebar { color:var(--muted); font-size:12px; }
+    .sidebar strong { display:block; color:var(--ink); margin-bottom:5px; font-size:11px; letter-spacing:1px; text-transform:uppercase; }
+    .sidebar p { margin:0 0 23px; }
+    article { max-width:720px; }
+    article section { padding:0 0 34px; margin:0 0 34px; border-bottom:1px solid var(--line); }
+    article section:last-child { border-bottom:0; }
+    h2 { margin:0 0 12px; font-size:24px; font-weight:600; letter-spacing:-.025em; line-height:1.2; }
+    article p { margin:0 0 14px; font-size:15px; line-height:1.75; }
+    .question { padding:21px 23px; background:#e8e4da; border-left:3px solid var(--accent); font-size:17px; }
+    .question strong { display:block; margin-bottom:5px; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; }
+    .flow { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:10px; margin-top:20px; }
+    .flow-step { position:relative; min-height:124px; padding:17px 15px; background:var(--panel); border:1px solid var(--line); }
+    .flow-step:not(:last-child)::after { content:'→'; position:absolute; top:50%; right:-16px; z-index:1; color:var(--accent); font-size:22px; transform:translateY(-50%); }
+    .flow-step b { display:block; margin-bottom:7px; font-size:11px; letter-spacing:1px; text-transform:uppercase; }
+    .flow-step span { display:block; color:var(--muted); font-size:13px; line-height:1.5; }
+    .comparison { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:18px; margin-top:24px; }
+    .comparison figure { margin:0; }
+    .comparison-preview { display:block; width:100%; padding:0; border:0; background:transparent; cursor:zoom-in; }
+    .comparison figure img { height:auto; max-height:none; object-fit:contain; }
+    .comparison figcaption { display:flex; flex-direction:column; gap:4px; }
+    .comparison figcaption strong { color:var(--ink); font-size:13px; }
+    .comparison-note { margin:16px 0 0; color:var(--muted); font-size:13px; line-height:1.6; }
+    #image-lightbox { position:fixed; inset:0; z-index:20; display:flex; align-items:center; justify-content:center; padding:28px; background:rgba(18,18,16,0); opacity:0; pointer-events:none; transition:opacity .2s ease, background .2s ease; }
+    #image-lightbox.open { background:rgba(18,18,16,.9); opacity:1; pointer-events:auto; }
+    .lightbox-content { position:relative; max-width:min(1280px, 100%); max-height:100%; }
+    #lightbox-image { display:block; max-width:100%; max-height:calc(100vh - 100px); background:#fff; }
+    #lightbox-caption { margin:10px 0 0; color:#f5f2e9; font-size:13px; text-align:center; }
+    #lightbox-close { position:absolute; top:10px; right:10px; width:36px; height:36px; border:0; border-radius:50%; background:rgba(20,20,18,.82); color:#fff; cursor:pointer; font-size:22px; }
+    ul { padding-left:20px; margin:14px 0; }
+    li + li { margin-top:8px; }
+    .related { margin-top:28px; padding:26px; background:#292824; color:#f7f5ef; }
+    .related p { margin:0 0 10px; color:#d9d5ca; }
+    .related a { color:white; font-size:17px; font-weight:600; }
+    .back { display:inline-block; margin-top:52px; color:var(--ink); font-size:12px; font-weight:700; letter-spacing:1px; text-decoration:none; text-transform:uppercase; }
+    @media (max-width:760px) { header { align-items:flex-start; flex-direction:column; padding:14px 20px; } main { padding:36px 20px 56px; } .hero,.layout,.flow,.comparison { grid-template-columns:1fr; gap:24px; } .hero { margin:30px 0 42px; } .sidebar { display:grid; grid-template-columns:1fr 1fr; gap:12px 24px; } .sidebar p { margin:0; } .deck { font-size:16px; } h1 { font-size:clamp(36px,13vw,54px); } .flow { gap:10px; } .flow-step { min-height:auto; } .flow-step:not(:last-child)::after { content:'↓'; top:auto; right:auto; bottom:-21px; left:50%; transform:translateX(-50%); } #image-lightbox { padding:18px; } }
+    dialog:not([open]) { display:none !important; }
+    dialog { margin:0; border:0; width:100%; height:100%; max-width:none; max-height:none; }
+    dialog::backdrop { background:transparent; }
+    #lightbox-close { width:44px; height:44px; }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="brand" href="index.html">Rubin Danely’s World</a>
+    <nav aria-label="Projects">
+      <a data-project="bines-academy" href="portfolio.html?id=bines-academy">Bines Academy</a>
+      <a data-project="acnematch" href="portfolio.html?id=acnematch">Acne Camz</a>
+    </nav>
+  </header>
+
+  <main id="app"></main>
+  <dialog id="image-lightbox" role="dialog" aria-modal="true" aria-label="Full-size comparison image">
+    <div class="lightbox-content">
+      <button id="lightbox-close" type="button" aria-label="Close full-size image">×</button>
+      <img id="lightbox-image" alt="" />
+      <p id="lightbox-caption"></p>
+    </div>
+  </dialog>
+
+  <script>
+    const projects = {
+      'bines-academy': {
+        name: 'Bines Academy',
+        label: 'Learning-technology research concept',
+        timeline: '6 months · ongoing',
+        tools: 'Web app stack · Front end · Backend · Supabase · React',
+        accent: '#e75b1b',
+        image: 'https://i.ytimg.com/vi/4360EJurOmk/maxresdefault.jpg',
+        videoId: '4360EJurOmk',
+        videoUrl: 'https://www.youtube.com/shorts/4360EJurOmk',
+        caption: 'Watch the Bines Academy video on YouTube Shorts.',
+        link: 'https://bines.academy',
+        linkLabel: 'Visit bines.academy ↗',
+        simpleExplanation: 'Bines Academy is a learning concept that uses a Socratic agent to encourage learners to think, ask questions, discuss ideas, and build their own understanding.',
+        deck: 'BinesAI is a Socratic learning platform that uses guided questions and feedback to build critical thinking, active inquiry, and independent problem-solving.',
+        abstract: 'BinesAI is a learning-technology platform for subjects including AI, financial literacy, logic, and spoken English. Rather than simply returning answers, it is designed to help students reason through a problem, explain their thinking, and decide what to explore next. The project is presented as a concept and research direction; this article does not claim measured learning outcomes.',
+        question: 'How might a Socratic conversational agent help learners articulate their reasoning, identify gaps, and continue a discussion?',
+        approach: 'The visual system names four learning actions: think, learn, ask, and discuss. Together, these form a useful starting model for the product: a learner encounters material, forms an interpretation, asks a question, and returns to the conversation with a revised view. The agent’s value should come from the quality and timing of its prompts—not from replacing the learner’s judgement.',
+        llm: {
+          intro: 'BinesAI uses LLM APIs, including Gemini and Llama, as the underlying tutor engine. A structured instruction layer shapes each response: it sets the learning goal, asks the model to use a Socratic style, checks a learner’s reply, and applies the platform’s pedagogical and safety rules. Prompt-injection safeguards are part of this layer, helping the system resist attempts to override those instructions.',
+          steps: [
+            ['LLM API', 'Gemini or Llama receives the learning context and the learner’s message.'],
+            ['Prompt controls', 'Structured prompts set the topic and Socratic teaching style; prompt-injection safeguards protect those rules.'],
+            ['Tutor response', 'The system returns a focused question, hint, or feedback—not only a final answer.'],
+            ['Learner reflection', 'The student answers, explains their reasoning, and continues the learning loop.']
+          ]
+        },
+        comparison: {
+          intro: 'The same multiplication question can lead to two very different learning interactions. This is an illustrative interface comparison, not a benchmark of model performance.',
+          items: [
+            { label: 'Bines Academy equation', image: './assets/projects/bines academy equation.jpg', text: 'The response shows the method, a quick check, and a real-world interpretation so the learner can follow the reasoning.' },
+            { label: 'Other LLM', image: './assets/projects/otherllm.jpg', text: 'The response gives the final result directly, with no visible reasoning path for the learner to inspect.' }
+          ]
+        },
+        evaluation: ['Define a target learner group and a bounded learning task.', 'Compare question-led interaction with a direct-answer experience.', 'Assess whether learners can explain their reasoning after use, not only whether they finish a task.', 'Record friction, confusing prompts, and moments where users need more control.'],
+        limits: 'The current materials establish the concept and visual direction, but do not yet document a deployed curriculum, model behavior, study protocol, or outcome data. Those details should be added before making effectiveness claims.',
+        related: 'acnematch'
+      },
+      acnematch: {
+        name: 'Acne Camz',
+        label: 'Camera-interaction research prototype',
+        timeline: '3 months · ongoing',
+        tools: 'Python · YOLO · ACNE04-v2 dataset',
+        accent: '#587f9f',
+        image: 'https://i.ytimg.com/vi/8lsiGRudXqY/maxresdefault.jpg?refresh=20261104',
+        videoId: '8lsiGRudXqY',
+        videoUrl: 'https://www.youtube.com/shorts/8lsiGRudXqY',
+        caption: 'Watch the Acnematch prototype video. The browser-based interface is labelled “Acne Scanner” and “Heuristic Mode.”',
+        link: 'https://github.com/AIpourlapeau/acne04v2',
+        linkLabel: 'View the Acne04-v2 dataset ↗',
+        dataset: {
+          image: 'https://raw.githubusercontent.com/AIpourlapeau/acne04v2/main/examples/levle1_254.jpg',
+          source: 'https://github.com/AIpourlapeau/acne04v2/blob/main/examples/levle1_254.jpg',
+          caption: 'Example image from the ACNE04-v2 dataset. This is a training-data illustration from the dataset repository, not an Acnematch result.'
+        },
+        simpleExplanation: 'Acnematch is a research prototype that uses a camera image and a YOLO model to identify and classify acne, then connects the result to research-based explanatory information.',
+        deck: 'A Python and YOLO object-detection research prototype for detecting and classifying acne from images, then connecting a classification to research-based explanatory context.',
+        abstract: 'Acnematch trains a machine-learning model in Python with YOLO object detection to recognize, locate, and classify acne in images. The training work uses the open-source Acne04-v2 dataset. The project then uses open clinical research on skin conditions and acne to assemble explanatory context that corresponds to a classification. This article treats the work as a research prototype, not as a diagnostic or treatment tool.',
+        question: 'How can an image-based acne-detection system present a model classification alongside clear, research-grounded context without overstating what the result means?',
+        approach: 'The workflow has three parts: an image is processed by a YOLO object-detection model; the model identifies acne-related regions and returns a classification; and the interface matches that classification to explanatory material drawn from open clinical research on skin conditions and acne. The supplied Acne04-v2 repository provides lesion annotations and YOLO-related scripts, making it a relevant open source training reference. The explanation layer is intended to provide context, not to turn a model output into a medical conclusion.',
+        evaluation: ['Measure detection and classification performance on a held-out evaluation set.', 'Review false positives, false negatives, confidence thresholds, and failure cases under different lighting conditions.', 'Check performance and error patterns across diverse skin tones and acne presentations.', 'Verify that the research explanations remain faithful to their clinical sources and are clearly separated from model predictions.', 'Review image consent, retention, deletion, and secure handling of facial images before any real-world use.'],
+        limits: 'No clinical accuracy, safety, or treatment claims are made here. Model classifications and supporting explanations are not a diagnosis and should not guide treatment decisions. Any deployment would require appropriate clinical validation, privacy safeguards, informed consent, and clear escalation to qualified healthcare professionals.',
+        related: 'bines-academy'
+      }
+    };
+
+    const id = new URLSearchParams(location.search).get('id') || 'bines-academy';
+    const project = projects[id] || projects['bines-academy'];
+    document.documentElement.style.setProperty('--accent', project.accent);
+    document.title = `${project.name} — Research Portfolio`;
+    document.querySelector(`[data-project="${id}"]`)?.setAttribute('aria-current', 'page');
+
+    document.getElementById('app').innerHTML = `
+      <p class="kicker">${project.label}</p>
+      <h1>${project.name}</h1>
+      <p class="deck">${project.deck}</p>
+      <div class="hero">
+        <figure>
+          ${project.videoUrl ? `
+            <div class="video-container">
+              <a class="video-preview" href="${project.videoUrl}" target="_blank" rel="noopener noreferrer" aria-label="Watch ${project.name} prototype video on YouTube">
+                <img src="${project.image}" alt="${project.name} prototype video thumbnail" loading="eager" />
+                <span class="play-btn" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+                </span>
+                <span class="yt-badge">Watch on YouTube ↗</span>
+              </a>
+            </div>
+          ` : `<img src="${project.image}" alt="${project.name} project preview" />`}
+          <figcaption>
+            ${project.caption}
+            ${project.videoUrl ? ` <a href="${project.videoUrl}" target="_blank" rel="noreferrer">Watch on YouTube ↗</a>` : ''}
+          </figcaption>
+        </figure>
+        <aside class="research-note"><h2>In simple terms</h2><p>${project.simpleExplanation}</p><a class="project-link" href="${project.link}" target="_blank" rel="noreferrer">${project.linkLabel}</a></aside>
+      </div>
+      <div class="layout">
+        <aside class="sidebar"><div><strong>Type</strong><p>${project.label}</p></div><div><strong>Timeline</strong><p>${project.timeline}</p></div><div><strong>Tools</strong><p>${project.tools}</p></div><div><strong>Status</strong><p>Concept / prototype framing</p></div><div><strong>Focus</strong><p>Interaction, clarity, and responsible evaluation</p></div></aside>
+        <article>
+          <section><h2>Abstract</h2><p>${project.abstract}</p></section>
+          <section class="question"><strong>Research question</strong>${project.question}</section>
+          <section><h2>Concept and interaction</h2><p>${project.approach}</p></section>
+          ${project.llm ? `<section><h2>LLM API → prompt controls → answer</h2><p>${project.llm.intro}</p><div class="flow">${project.llm.steps.map(step => `<div class="flow-step"><b>${step[0]}</b><span>${step[1]}</span></div>`).join('')}</div>${project.comparison ? `<div class="comparison">${project.comparison.items.map(item => `<figure><button class="comparison-preview" type="button" data-image="${item.image}" data-label="${item.label}"><img src="${item.image}" alt="${item.label} example — click to view full size" /></button><figcaption><strong>${item.label}</strong><span>${item.text}</span></figcaption></figure>`).join('')}</div><p class="comparison-note">${project.comparison.intro}</p>` : ''}</section>` : ''}
+          ${project.dataset ? `<section><h2>Training-data example: ACNE04-v2 dataset</h2><p>Acnematch uses the open-source ACNE04-v2 dataset for model training. The image below is explicitly identified as an example from that dataset.</p><figure class="dataset-figure"><img src="${project.dataset.image}" alt="Annotated example image from the ACNE04-v2 acne dataset" /><figcaption>${project.dataset.caption} <a href="${project.dataset.source}" target="_blank" rel="noreferrer">View source ↗</a></figcaption></figure></section>` : ''}
+          <section><h2>What to evaluate next</h2><ul>${project.evaluation.map(item => `<li>${item}</li>`).join('')}</ul></section>
+          <section><h2>Scope and limitations</h2><p>${project.limits}</p></section>
+        </article>
+      </div>
+      <aside class="related"><p>Continue exploring</p><a href="portfolio.html?id=${project.related}">${projects[project.related].name} →</a></aside>
+      <a class="back" href="index.html">← Return to the gallery</a>`;
+
+    const lightbox = document.getElementById('image-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    const closeLightbox = () => { lightbox.close(); lightbox.classList.remove('open'); };
+    lightbox.addEventListener('cancel',event => { event.preventDefault(); closeLightbox(); });
+    document.querySelectorAll('.comparison-preview').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.image;
+      lightboxImage.alt = `${button.dataset.label} full-size example`;
+      lightboxCaption.textContent = button.dataset.label;
+      lightbox.showModal(); lightbox.classList.add('open');
+    }));
+    document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', (event) => { if (event.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && lightbox.open) { event.preventDefault(); event.stopImmediatePropagation(); closeLightbox(); } });
+  </script>
+<script src="detail-navigation.js"></script>
+</body>
+</html>

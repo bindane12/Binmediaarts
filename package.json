@@ -1,0 +1,9 @@
+{
+  "name": "bin-art-media-porto",
+  "version": "1.0.0",
+  "description": "3D Art Gallery & Portfolio",
+  "scripts": {
+    "start": "python3 -m http.server 8000 --directory gallery-3d",
+    "serve": "npx -y serve gallery-3d -l 8000"
+  }
+}

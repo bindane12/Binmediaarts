@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Artwork — Grand Gallery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --gold: #c9a25b;
+      --gold-dim: rgba(201,162,91,0.4);
+      --bg: #0e0c0a;
+      --surface: #161310;
+      --border: rgba(201,162,91,0.18);
+      --text: #f0e6d8;
+      --text-dim: rgba(210,190,160,0.65);
+    }
+
+    html, body { height: 100%; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ─── Top Navigation ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 64px;
+      background: rgba(14,12,10,0.88);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(14px);
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px; font-weight: 300; letter-spacing: 6px;
+      text-transform: uppercase; color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-back {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--gold); text-decoration: none;
+      padding: 8px 18px; border: 1px solid var(--gold-dim);
+      border-radius: 3px; transition: all 0.25s;
+    }
+    .nav-back:hover { background: rgba(201,162,91,0.12); border-color: var(--gold); }
+
+    /* ─── Main layout ─── */
+    main {
+      padding-top: 64px;
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 100vh;
+    }
+
+    /* Left: Large Artwork Canvas */
+    .artwork-visual {
+      position: sticky; top: 64px; height: calc(100vh - 64px);
+      display: flex; align-items: center; justify-content: center;
+      background: #0a0908;
+      border-right: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .artwork-frame {
+      position: relative;
+      box-shadow:
+        0 0 0 1px rgba(201,162,91,0.4),
+        0 0 0 12px rgba(14,12,10,0.6),
+        0 0 0 14px rgba(201,162,91,0.25),
+        0 40px 100px rgba(0,0,0,0.8);
+      border-radius: 2px;
+      max-width: 80%; max-height: 70vh;
+    }
+
+    .artwork-frame canvas {
+      display: block;
+      width: 100%; height: 100%;
+      border-radius: 1px;
+    }
+
+    /* Right: Artwork Info */
+    .artwork-info {
+      padding: 80px 72px;
+      overflow-y: auto;
+      display: flex; flex-direction: column; gap: 32px;
+      min-height: calc(100vh - 64px);
+    }
+
+    .info-badge {
+      display: inline-block;
+      font-size: 10px; letter-spacing: 5px; text-transform: uppercase;
+      color: var(--gold);
+      border-bottom: 1px solid var(--gold-dim); padding-bottom: 8px;
+      width: fit-content;
+    }
+
+    .info-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 4vw, 60px); font-weight: 300;
+      letter-spacing: 4px; text-transform: uppercase;
+      color: var(--text); line-height: 1.15;
+    }
+
+    .info-title em {
+      display: block; font-style: italic; font-size: 0.6em;
+      letter-spacing: 2px; color: rgba(201,162,91,0.75);
+      margin-top: 6px;
+    }
+
+    .info-rule {
+      width: 50px; height: 1px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+    }
+
+    .meta-grid {
+      display: grid; grid-template-columns: auto 1fr; gap: 10px 24px;
+      font-size: 13px;
+    }
+    .meta-key { color: var(--text-dim); letter-spacing: 2px; text-transform: uppercase; font-size: 10px; padding-top: 2px; }
+    .meta-val { color: var(--text); font-size: 14px; font-weight: 300; }
+
+    .info-description {
+      font-size: 15px; line-height: 1.85;
+      color: rgba(220,205,185,0.82);
+      font-weight: 300; max-width: 520px;
+    }
+
+    .info-description p + p { margin-top: 16px; }
+
+    .info-tags {
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .tag {
+      font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+      padding: 5px 14px; border: 1px solid var(--border);
+      border-radius: 20px; color: var(--text-dim);
+    }
+
+    .info-actions {
+      display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px;
+    }
+    .btn {
+      padding: 12px 28px; font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      cursor: pointer; border-radius: 3px; transition: all 0.25s ease;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+      font-family: inherit;
+    }
+    .btn-primary {
+      background: rgba(201,162,91,0.12); border: 1px solid rgba(201,162,91,0.5);
+      color: #f5dfb8;
+    }
+    .btn-primary:hover { background: rgba(201,162,91,0.28); box-shadow: 0 0 20px rgba(201,162,91,0.2); }
+    .btn-ghost {
+      background: transparent; border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-dim);
+    }
+    .btn-ghost:hover { border-color: rgba(255,255,255,0.25); color: var(--text); }
+
+    /* ─── Not found ─── */
+    .not-found {
+      grid-column: 1 / -1;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 20px; text-align: center;
+      color: var(--text-dim);
+    }
+    .not-found h1 { font-size: 40px; font-weight: 200; letter-spacing: 8px; color: var(--text); }
+
+    /* ─── Footer ─── */
+    footer {
+      grid-column: 2;
+      padding: 32px 72px;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 11px; letter-spacing: 2px; color: var(--text-dim);
+    }
+
+    @media (max-width: 860px) {
+      main { grid-template-columns: 1fr; grid-template-rows: auto auto; }
+      .artwork-visual { position: relative; top: 0; height: 50vw; min-height: 280px; border-right: none; border-bottom: 1px solid var(--border); }
+      .artwork-info { padding: 48px 32px; }
+      footer { grid-column: 1; }
+      nav { padding: 0 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">Grand Gallery</a>
+  <a class="nav-back" href="index.html">← Return to Gallery</a>
+</nav>
+
+<main id="main-content">
+  <!-- Populated by JS -->
+</main>
+
+<script type="module">
+import { FINE_ART } from './fine-art.js';
+/* ─── Artwork Data Catalogue ─── */
+const ARTWORKS = [
+  {
+    id: 'opus-i',
+    title: 'Opus I',
+    artist: 'Elara Voss',
+    year: '2021',
+    medium: 'Oil on linen',
+    dimensions: '180 × 140 cm',
+    badge: 'Abstract Expressionism',
+    collection: 'Grand Gallery Permanent Collection',
+    tags: ['Abstract', 'Oil', 'Gold Leaf', 'Contemporary'],
+    desc: `A meditative exploration of concentric tension. Voss layers translucent gold leaf over raw linen, building depth through repetition — each ring a breath held and released.\n\nFirst exhibited at the Venice Biennale, Opus I established Voss as a leading voice in post-digital abstraction. Critics noted the work's ability to appear simultaneously ancient and radical, a quality Voss attributes to the tension between organic mark-making and mechanical repetition.\n\nThe gold rings that define the composition were applied over fourteen sessions, each one responding to the last in a process Voss describes as "listening to the canvas."`,
+    type: 'gold-abstract'
+  },
+  {
+    id: 'comp-ii',
+    title: 'Composition II',
+    artist: 'Jin Hao Park',
+    year: '2019',
+    medium: 'Acrylic & resin',
+    dimensions: '120 × 90 cm',
+    badge: 'Contemporary Minimalism',
+    collection: 'Lent by the Seoul Museum of Modern Art',
+    tags: ['Geometric', 'Minimalism', 'Acrylic', 'Korean Contemporary'],
+    desc: `Geometric planes intersect at precisely calculated angles, dissolving the boundary between painting and architecture. Park invites the viewer to complete the composition through their movement and gaze.\n\nWorking from architectural blueprints and mathematical models, Park constructs pictorial spaces that feel engineered yet deeply human. The resin surface traps light, shifting the work's mood from cooler blues to warm ochre depending on viewing angle.\n\nComposition II was acquired following its debut at Art Basel 2019, where it was cited as "a quiet revolution in the language of plane."`,
+    type: 'minimal-geo'
+  },
+  {
+    id: 'resonance',
+    title: 'Resonance III',
+    artist: 'Amara Ndiaye',
+    year: '2022',
+    medium: 'Digital print & pigment on archival paper',
+    dimensions: '200 × 160 cm',
+    badge: 'Neo-Symbolism',
+    collection: 'Grand Gallery Permanent Collection',
+    tags: ['Digital', 'Pigment', 'African Contemporary', 'Symbol'],
+    desc: `Ndiaye merges traditional Wolof weaving patterns with digital interference, creating a visual frequency that shifts as you approach. The amber glow evokes Dakar street light at dusk.\n\nThe work exists in a deliberate tension between heritage and technology — the woven grid underneath the digital surface is hand-drawn, referencing the kënk patterns of Ndiaye's grandmother. The interference layer above was generated through custom software that treats weaving algorithms as musical scores.\n\n"I want the work to feel like memory being transmitted through noise," Ndiaye has said. "Something ancient reaching you through a modern signal."`,
+    type: 'cyber-amber'
+  },
+  {
+    id: 'nocturne',
+    title: 'Nocturne IV',
+    artist: 'Sven Larsson',
+    year: '2020',
+    medium: 'Charcoal & graphite on cotton rag',
+    dimensions: '150 × 110 cm',
+    badge: 'Dark Romanticism',
+    collection: 'Private Collection, Stockholm',
+    tags: ['Charcoal', 'Monochrome', 'Figurative', 'Nordic'],
+    desc: `Rendered entirely in monochrome, Larsson captures the vulnerable geometry of the sleeping form. The ellipse at center breathes — a study in the poetry of restraint and shadow.\n\nLarsson works exclusively in black and white, calling colour "a distraction from the essential." Nocturne IV was produced over three consecutive sleepless nights as part of a durational performance in his Stockholm studio.\n\nThe single elliptical form has been read as a body, an eye, a lunar eclipse, a stone dropped in still water. Larsson refuses to specify: "Ambiguity is the work's generosity."`,
+    type: 'mono'
+  },
+  {
+    id: 'symphony',
+    title: 'Symphony V',
+    artist: 'Celia Moreau',
+    year: '2023',
+    medium: 'Encaustic wax on oak panel',
+    dimensions: '130 × 100 cm',
+    badge: 'Tactile Abstraction',
+    collection: 'Grand Gallery Permanent Collection',
+    tags: ['Encaustic', 'Wax', 'Texture', 'French Contemporary'],
+    desc: `Built up in dozens of layers of heated wax, each chord of the symphony corresponds to a physical stratum. You are invited to run your eye across its topography as you would a musical score.\n\nMoreau composed this piece in direct dialogue with Arvo Pärt's Spiegel im Spiegel — each session of application triggered by a new listening of the piece. The outermost layer was applied in silence.\n\nThe work resists photography entirely. Its surface only reveals itself in raking light or physical proximity — a deliberate refusal of reproduction, and an insistence on presence.`,
+    type: 'mono'
+  },
+  {
+    id: 'aura',
+    title: 'Aura VI',
+    artist: 'Amara Ndiaye',
+    year: '2021',
+    medium: 'Digital print & pigment on archival paper',
+    dimensions: '180 × 140 cm',
+    badge: 'Neo-Symbolism',
+    collection: 'Grand Gallery Permanent Collection',
+    tags: ['Digital', 'Pigment', 'African Contemporary', 'Amber'],
+    desc: `A companion piece to Resonance III. Here the amber diffuses into copper and rust — the residue of a city's warmth after the crowd has thinned and the streets exhale.\n\nWhere Resonance III pulses, Aura VI settles. The interference patterns are quieter, the underlying weave more loosely drawn. Ndiaye has described it as "the same city, hours later."\n\nThe two works are intended to be experienced in sequence, but the Grand Gallery has placed them apart — trusting visitors to feel the conversation across the room.`,
+    type: 'cyber-amber'
+  },
+  {
+    id: 'continuum',
+    title: 'Continuum VII',
+    artist: 'Jin Hao Park',
+    year: '2022',
+    medium: 'Acrylic & resin',
+    dimensions: '140 × 110 cm',
+    badge: 'Contemporary Minimalism',
+    collection: 'Lent by the Seoul Museum of Modern Art',
+    tags: ['Geometric', 'Organic', 'Acrylic', 'Korean Contemporary'],
+    desc: `Park dissolves the grid. Circles intrude upon the geometric order, suggesting the persistence of organic life within structured systems. A meditation on entropy and design.\n\nContinuum VII marks a turning point in Park's practice. Where his earlier works enforced strict rectilinear discipline, here circles interrupt at irregular intervals — imperfect, pressured, insistent. Park speaks of them as "the part of the plan the plan forgot."\n\nThe resin surface has been deliberately clouded in areas, creating pockets of opacity that resist the work's otherwise cool transparency.`,
+    type: 'minimal-geo'
+  },
+  {
+    id: 'genesis',
+    title: 'Genesis VIII',
+    artist: 'Elara Voss',
+    year: '2018',
+    medium: 'Oil on linen',
+    dimensions: '160 × 130 cm',
+    badge: 'Abstract Expressionism',
+    collection: 'Grand Gallery Permanent Collection',
+    tags: ['Abstract', 'Oil', 'Gold', 'Early Work'],
+    desc: `The earliest work in this collection — the seed from which Voss's language grew. Raw, urgent, and already certain: golden spirals push through the dark ground with unmistakable force.\n\nPainted before the critical recognition that would define her subsequent decade, Genesis VIII carries a freedom that Voss herself describes as "unguarded." The spirals here are faster, looser, less considered — and perhaps more honest.\n\nAcquired directly from Voss's first solo show, the work has never been publicly exhibited before this collection.`,
+    type: 'gold-abstract'
+  },
+  {
+    id: 'bines-academy',
+    title: 'Bines Academy',
+    artist: 'Bines Academy',
+    year: '2026',
+    medium: 'Interactive display',
+    dimensions: '110 × 110 cm',
+    badge: 'Featured Project',
+    collection: 'Grand Gallery Project Display',
+    tags: ['Featured', 'Academy', 'Interactive'],
+    desc: `Bines Academy is presented as a featured project display in the Grand Gallery. Select this panel to explore its dedicated information page.`,
+    type: 'display-bines'
+  },
+  {
+    id: 'acnematch',
+    title: 'Acnematch',
+    artist: 'Acnematch',
+    year: '2026',
+    medium: 'Interactive display',
+    dimensions: '110 × 110 cm',
+    badge: 'Featured Project',
+    collection: 'Grand Gallery Project Display',
+    tags: ['Featured', 'Acnematch', 'Interactive'],
+    desc: `Acnematch is presented as a featured project display in the Grand Gallery. Select this panel to explore its dedicated information page.`,
+    type: 'display-acnematch'
+  }
+];
+
+/* ─── Read URL param ─── */
+const params = new URLSearchParams(location.search);
+const id     = params.get('id');
+const art    = [...ARTWORKS, ...FINE_ART].find(a => a.id === id);
+const main   = document.getElementById('main-content');
+
+if (!art) {
+  main.innerHTML = `
+    <div class="not-found">
+      <h1>404</h1>
+      <p style="letter-spacing:3px;font-size:12px;text-transform:uppercase;color:var(--text-dim)">Artwork not found</p>
+      <a class="btn btn-primary" href="index.html">Return to Gallery</a>
+    </div>`;
+} else {
+  document.title = `${art.title} — Grand Gallery`;
+
+  /* ─── Render artwork canvas ─── */
+  function drawArtwork(type, canvas) {
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+
+    if (type === 'gold-abstract') {
+      const grad = ctx.createLinearGradient(0, 0, W, H);
+      grad.addColorStop(0, '#151311');
+      grad.addColorStop(0.5, '#2e2417');
+      grad.addColorStop(1, '#0f0e0c');
+      ctx.fillStyle = grad; ctx.fillRect(0, 0, W, H);
+      for (let i = 0; i < 9; i++) {
+        ctx.beginPath();
+        ctx.arc(W * 0.42 + i * 22, H * 0.5, 55 + i * 18, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(223,184,106,${0.35 + i * 0.07})`;
+        ctx.lineWidth = 2.5;
+        ctx.globalAlpha = 1;
+        ctx.stroke();
+      }
+    } else if (type === 'minimal-geo') {
+      ctx.fillStyle = '#171a1d'; ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = '#3a5f8a';
+      ctx.beginPath(); ctx.arc(W * 0.65, H * 0.42, 120, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#c59d5f';
+      ctx.fillRect(W * 0.18, H * 0.28, 210, 210);
+      ctx.strokeStyle = '#e6c88b'; ctx.lineWidth = 2.5;
+      ctx.strokeRect(W * 0.22, H * 0.22, 230, 230);
+    } else if (type === 'cyber-amber') {
+      const grad = ctx.createRadialGradient(W * 0.5, H * 0.5, 14, W * 0.5, H * 0.5, 280);
+      grad.addColorStop(0, '#d68b35');
+      grad.addColorStop(0.55, '#4a250a');
+      grad.addColorStop(1, '#110b06');
+      ctx.fillStyle = grad; ctx.fillRect(0, 0, W, H);
+      ctx.strokeStyle = '#ffc078'; ctx.lineWidth = 1.5;
+      for (let x = 0; x < W; x += 48) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(W - x, H);
+        ctx.globalAlpha = 0.22; ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+    } else if (type === 'display-bines' || type === 'display-acnematch') {
+      const accent = type === 'display-bines' ? '#d6ae66' : '#9ab8d8';
+      const title = type === 'display-bines' ? 'BINES ACADEMY' : 'ACNEMATCH';
+      ctx.fillStyle = '#0d0b09'; ctx.fillRect(0, 0, W, H);
+      ctx.strokeStyle = accent; ctx.lineWidth = 7;
+      ctx.strokeRect(W * 0.1, H * 0.1, W * 0.8, H * 0.8);
+      ctx.fillStyle = accent; ctx.fillRect(W * 0.2, H * 0.3, W * 0.12, 4);
+      ctx.font = '24px Arial'; ctx.fillText('FEATURED DISPLAY', W * 0.2, H * 0.24);
+      ctx.font = 'bold 48px Arial'; ctx.textAlign = 'center';
+      title.split(' ').forEach((word, index) => ctx.fillText(word, W / 2, H * 0.48 + index * 60));
+      ctx.font = '18px Arial'; ctx.fillStyle = '#e8dcc7';
+      ctx.fillText('PROJECT INFORMATION', W / 2, H * 0.76);
+      ctx.textAlign = 'left';
+    } else {
+      const grad = ctx.createLinearGradient(0, 0, 0, H);
+      grad.addColorStop(0, '#2b2a28');
+      grad.addColorStop(0.5, '#403d38');
+      grad.addColorStop(1, '#121110');
+      ctx.fillStyle = grad; ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = '#decab0'; ctx.globalAlpha = 0.72;
+      ctx.beginPath();
+      ctx.ellipse(W * 0.5, H * 0.54, 155, 88, Math.PI / 6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  const canvas = document.createElement('canvas');
+  canvas.width = 800; canvas.height = 600;
+  if (!art.isFineArt) drawArtwork(art.type, canvas);
+
+  const tagsHtml = art.tags.map(t => `<span class="tag">${t}</span>`).join('');
+  const descHtml = art.desc.split('\n\n').map(p => `<p>${p}</p>`).join('');
+
+  main.innerHTML = `
+    <div class="artwork-visual">
+      <div class="artwork-frame" id="frame-container"></div>
+    </div>
+    <div class="artwork-info">
+      <div class="info-badge">${art.badge}</div>
+      <div class="info-title">
+        ${art.title}
+        <em>${art.artist}</em>
+      </div>
+      <div class="info-rule"></div>
+      <div class="meta-grid">
+        <span class="meta-key">Year</span>       <span class="meta-val">${art.year}</span>
+        <span class="meta-key">Medium</span>     <span class="meta-val">${art.medium}</span>
+        <span class="meta-key">Size</span>        <span class="meta-val">${art.dimensions}</span>
+        <span class="meta-key">Collection</span> <span class="meta-val">${art.collection}</span>
+      </div>
+      <div class="info-description">${descHtml}</div>
+      <div class="info-tags">${tagsHtml}</div>
+      <div class="info-actions">
+        <a class="btn btn-primary" href="index.html">← Return to Gallery</a>
+        <button class="btn btn-ghost" onclick="window.print()">⊙ Print</button>
+      </div>
+    </div>
+    <footer>
+      <span>Grand Gallery &nbsp;&mdash;&nbsp; Virtual Exhibition</span>
+      <span>${art.year} &nbsp;·&nbsp; ${art.artist}</span>
+    </footer>`;
+
+  const frame = document.getElementById('frame-container');
+  if (art.isFineArt) {
+    const image = document.createElement('img');
+    image.src = art.preview;
+    image.alt = art.title;
+    image.style.cssText = 'display:block;max-width:100%;max-height:70vh;width:auto;height:auto;object-fit:contain;';
+    frame.appendChild(image);
+  } else {
+    frame.appendChild(canvas);
+  }
+}
+</script>
+<script src="detail-navigation.js"></script>
+</body>
+</html>
